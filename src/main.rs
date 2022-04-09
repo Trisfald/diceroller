@@ -31,6 +31,9 @@ fn main() {
     let mut successes = 0;
     let mut rolled_one = false;
 
+    #[cfg(windows)]
+    control::set_virtual_terminal(true).unwrap();
+
     // Roll loop.
     let mut success_history: Vec<u8> = Vec::new();
     for _ in 1..=opts.dice.into() {
