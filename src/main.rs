@@ -1,14 +1,13 @@
 use crate::number_expression::NumberExpression;
-use clap::{AppSettings, Clap};
+use clap::Parser;
 use colored::*;
 use rand::prelude::*;
 use std::collections::BTreeMap;
 
 mod number_expression;
 
-#[derive(Clap)]
+#[derive(Parser)]
 #[clap(version = "1.0", author = "Trisfald <trisfald@gmail.com>")]
-#[clap(setting = AppSettings::ColoredHelp)]
 struct Opts {
     /// Size of the dice pool.
     dice: NumberExpression,
