@@ -1,14 +1,13 @@
 use crate::number_expression::NumberExpression;
-use clap::{AppSettings, Clap};
+use clap::Parser;
 use colored::*;
 use rand::prelude::*;
 use std::collections::BTreeMap;
 
 mod number_expression;
 
-#[derive(Clap)]
+#[derive(Parser)]
 #[clap(version = "1.0", author = "Trisfald <trisfald@gmail.com>")]
-#[clap(setting = AppSettings::ColoredHelp)]
 struct Opts {
     /// Size of the dice pool.
     dice: NumberExpression,
@@ -31,6 +30,9 @@ fn main() {
     let mut rng = thread_rng();
     let mut successes = 0;
     let mut rolled_one = false;
+
+    #[cfg(windows)]
+    control::set_virtual_terminal(true).unwrap();
 
     // Roll loop.
     let mut success_history: Vec<u8> = Vec::new();
