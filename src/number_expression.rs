@@ -5,7 +5,7 @@ enum Op {
     Subtraction,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub struct NumberExpression(u8);
 
 impl std::fmt::Display for NumberExpression {
@@ -66,5 +66,24 @@ impl FromStr for NumberExpression {
             op = next_op;
         }
         Ok(NumberExpression(result))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add() {
+        assert_eq!("2+2".parse::<NumberExpression>(), Ok(NumberExpression(4)));
+        assert_eq!("2+2+1".parse::<NumberExpression>(), Ok(NumberExpression(5)));
+        assert_eq!(
+            "2 + 2 + 1".parse::<NumberExpression>(),
+            Ok(NumberExpression(5))
+        );
+        assert_eq!("2-1".parse::<NumberExpression>(), Ok(NumberExpression(1)));
+        assert_eq!("2 - 1".parse::<NumberExpression>(), Ok(NumberExpression(1)));
+        assert_eq!("2-1+5".parse::<NumberExpression>(), Ok(NumberExpression(6)));
+        assert!("2-5".parse::<NumberExpression>().is_err());
     }
 }

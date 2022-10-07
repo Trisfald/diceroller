@@ -56,7 +56,7 @@ fn main() {
             };
             println!(
                 "{} vs {}",
-                format!("{: >2}", color(result.to_string().bold())),
+                format_args!("{: >2}", color(result.to_string().bold())),
                 difficulty
             );
         }
@@ -67,12 +67,10 @@ fn main() {
         println!("{}", "Critical failure!".bold().red());
     } else {
         let matches = get_matches(&success_history);
-        let matches_str = if matches == 1 {
-            format!(" ({} match)", matches)
-        } else if matches > 1 {
-            format!(" ({} matches)", matches)
-        } else {
-            "".to_string()
+        let matches_str = match matches {
+            1 => format!(" ({} match)", matches),
+            i if i > 1 => format!(" ({} matches)", matches),
+            _ => "".to_string(),
         };
         let color = if successes > 0 {
             |x: ColoredString| x.green()
@@ -103,5 +101,18 @@ fn get_matches(successes: &[u8]) -> u8 {
         matches - 1
     } else {
         0
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_matches() {
+        assert_eq!(get_matches(&[2, 3, 4]), 0);
+        assert_eq!(get_matches(&[]), 0);
+        assert_eq!(get_matches(&[1, 2, 1]), 1);
+        assert_eq!(get_matches(&[1, 1, 3, 3, 1]), 2);
     }
 }
